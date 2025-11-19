@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GameMarket</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0d0f16;
+  color: #ffffff;
+}
+header, section {
+  padding: 60px 20px;
+  text-align: center;
+}
+h1 { font-size: 48px; margin-bottom: 10px; }
+h2 { font-size: 36px; margin-bottom: 10px; }
+h3 { font-size: 28px; margin-bottom: 10px; }
+p { font-size: 18px; opacity: 0.8; }
+.navbar {
+  display: flex;
+  justify-content: center;
+  background: #12151f;
+  padding: 20px;
+  gap: 40px;
+}
+.navbar a {
+  color: #7aa2ff;
+  text-decoration: none;
+  font-size: 18px;
+}
+.products, .reviews {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.product, .review {
+  background: #1a1d29;
+  padding: 20px;
+  border-radius: 8px;
+  width: 280px;
+  text-align: left;
+}
+button {
+  background: #7aa2ff;
+  border: none;
+  padding: 10px 20px;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+footer {
+  background: #0b0d13;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  flex-wrap: wrap;
+}
+footer div h4 { margin-bottom: 10px; font-size: 20px; }
+footer a { display: block; color: #7aa2ff; text-decoration: none; margin: 4px 0; }
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #1a1d29;
+  padding: 30px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <a href="#shop">Shop</a>
+  <a href="https://discord.gg/q9AMpTBhc" target="_blank">Support</a>
+  <a href="https://discord.gg/q9AMpTBhc" target="_blank">Discord</a>
+  <a href="#feedback">Feedback</a>
+</div>
+
+<header>
+  <h1>Premium Gaming Accounts</h1>
+  <p>Get instant access to high quality accounts. Trusted seller with over 500+ sales.</p>
+</header>
+
+<section>
+  <h2>Featured Accounts</h2>
+  <p>Hand-picked premium accounts ready for instant delivery</p>
+  <div class="products">
+    <div class="product">
+      <h3>Steam Account</h3>
+      <p>Premium Lifetime<br>No vouch = No warranty</p>
+      <button onclick="checkout('Steam Account')">Buy Now</button>
+    </div>
+    <div class="product">
+      <h3>Fivem Ready Account</h3>
+      <p>Premium Lifetime<br>No vouch = No warranty</p>
+      <button onclick="checkout('Fivem Ready Account')">Buy Now</button>
+    </div>
+    <div class="product">
+      <h3>Discord Verified Account</h3>
+      <p>Premium Lifetime<br>No vouch = No warranty</p>
+      <button onclick="checkout('Discord Verified Account')">Buy Now</button>
+    </div>
+  </div>
+</section>
+
+<section id="shop">
+  <h2>Shop</h2>
+  <div class="products">
+    <div class="product">
+      <h3>Steam Account</h3>
+      <p>Premium Lifetime<br>No vouch = No warranty</p>
+      <button onclick="checkout('Steam Account')">Buy Now</button>
+    </div>
+    <div class="product">
+      <h3>Fivem Ready Account</h3>
+      <p>Premium Lifetime<br>No vouch = No warranty</p>
+      <button onclick="checkout('Fivem Ready Account')">Buy Now</button>
+    </div>
+    <div class="product">
+      <h3>Discord Verified Account</h3>
+      <p>Premium Lifetime<br>No vouch = No warranty</p>
+      <button onclick="checkout('Discord Verified Account')">Buy Now</button>
+    </div>
+    <div class="product">
+      <h3>IPVanish Account</h3>
+      <p>Premium Lifetime<br>No vouch = No warranty</p>
+      <button onclick="checkout('IPVanish Account')">Buy Now</button>
+    </div>
+  </div>
+</section>
+
+<section id="feedback">
+  <h2>What Our Customers Say</h2>
+  <div class="reviews" id="reviews">
+    <!-- Reviews will populate here -->
+  </div>
+</section>
+
+<footer>
+  <div>
+    <h4>Quick Links</h4>
+    <a href="#shop">Shop</a>
+    <a href="https://discord.gg/q9AMpTBhc" target="_blank">Support</a>
+  </div>
+  <div>
+    <h4>Categories</h4>
+    <a href="#">FiveM Accounts</a>
+    <a href="#">Discord Accounts</a>
+    <a href="#">Steam Accounts</a>
+    <a href="#">IPVanish Accounts</a>
+  </div>
+  <div>
+    <h4>Community</h4>
+    <a href="https://discord.gg/q9AMpTBhc" target="_blank">Join our Discord!</a>
+  </div>
+</footer>
+
+<div class="modal" id="paypalModal">
+  <div class="modal-content">
+    <h3>PayPal Payment Details</h3>
+    <p>Enter your PayPal Email and make sure to use Friends & Family mode.</p>
+    <p>Your unique code: <span id="paypalCode"></span></p>
+    <input type="email" id="paypalEmail" placeholder="PayPal Email" />
+    <button onclick="submitPaypal()">Continue</button>
+  </div>
+</div>
+
+<script>
+const reviews = [
+  {name: 'Jacob H.', stars: 5, text: 'Super fast delivery and the account worked perfectly. Will definitely buy again!'},
+  {name: 'Emily R.', stars: 5, text: 'Amazing service! Support helped me immediately and the account was top tier quality.'},
+  {name: 'Mark L.', stars: 5, text: 'Absolutely worth the price. Quick, safe and reliable. Highly recommended!'}
+];
+
+function loadReviews(){
+  const container = document.getElementById('reviews');
+  reviews.forEach(r=>{
+    const div = document.createElement('div');
+    div.className = 'review';
+    div.innerHTML = `<strong>${'★'.repeat(r.stars)} — ${r.name}</strong><p>${r.text}</p>`;
+    container.appendChild(div);
+  });
+}
+
+loadReviews();
+
+function generateCode(){
+  return 'GM'+Math.floor(Math.random()*90000+10000);
+}
+
+let currentProduct = '';
+function checkout(product){
+  currentProduct = product;
+  const code = generateCode();
+  document.getElementById('paypalCode').innerText = code;
+  document.getElementById('paypalModal').style.display = 'flex';
+}
+
+function submitPaypal(){
+  const email = document.getElementById('paypalEmail').value;
+  alert(`PayPal Email: ${email}\nProduct: ${currentProduct}\nYour unique code has been generated.`);
+  document.getElementById('paypalModal').style.display = 'none';
+}
+</script>
+
+</body>
+</html>
