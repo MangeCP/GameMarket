@@ -1,11 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-const stripe = require('stripe')('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');
+const path = require('path');
+require('dotenv').config();
+
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const cors = require('cors');
 
-const ADMIN_PASSWORD = "letmein123"; // <- CHANGE THIS!
-const ACCOUNTS_FILE = 'accounts.json';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const ACCOUNTS_FILE = path.join(__dirname, 'accounts.json');
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
