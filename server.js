@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-const stripe = require('stripe')('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');
 const cors = require('cors');
 
 const ADMIN_PASSWORD = "letmein123"; // <- CHANGE THIS!
@@ -50,31 +49,42 @@ function getCredentials(n) {
   return {error: null, details: out}
 }
 
-// ---------- STRIPE PAYMENTS ----------
-app.post("/create-payment-intent", async (req, res) => {
-  let { cart, email } = req.body;
-  let amount = 0;
-  cart.forEach(item => {
-    if(item.id === "steam") amount += 1299 * item.qty;
-    if(item.id === "fivem") amount += 899 * item.qty;
-    if(item.id === "discord") amount += 699 * item.qty;
-    if(item.id === "ipvanish") amount += 949 * item.qty;
-  });
-  // Stripe expects amount in cents
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount, currency: 'usd', receipt_email: email, metadata: {cart: JSON.stringify(cart)}
-  });
-  res.json({clientSecret: paymentIntent.client_secret});
-});
-
-app.post("/get-credentials", async (req, res)=>{
-  let {paymentIntentId, cart, email} = req.body;
-  let pi = await stripe.paymentIntents.retrieve(paymentIntentId);
-  if (pi.status !== "succeeded") return res.json({success:false, error:"Payment not completed."});
-  let n_total = cart.reduce((t,i)=>t+i.qty,0);
-  let {error, details} = getCredentials(n_total);
-  if(error) return res.json({success:false, error});
-  res.json({success:true, details});
+// ---------- SHUTDOWN NOTICE ----------
+app.get("/", (req, res) => {
+  res.send(`
+    <html>
+      <head>
+        <title>GameMarket - Service Discontinued</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+          }
+          .notice {
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            max-width: 600px;
+          }
+          h1 { font-size: 2.5rem; margin-bottom: 20px; }
+          p { font-size: 1.2rem; line-height: 1.6; }
+        </style>
+      </head>
+      <body>
+        <div class="notice">
+          <h1>Service Discontinued</h1>
+          <p>GameMarket is no longer in operation. Thank you for your past support.</p>
+        </div>
+      </body>
+    </html>
+  `);
 });
 
 app.listen(4242, ()=>console.log("Backend running at http://localhost:4242/"));
